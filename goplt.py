@@ -3,7 +3,7 @@ import os
 
 from serial.serialutil import PortNotOpenError
 """
-AIzaSyAAWm6YJJ3Z5sPTxjKBA0ol-zIDS7FuMA4
+GOP-LT/CT通信コマンド処理用ライブラリ
 """
 def tohex(c):
     if(c>=b'0' and c<=b'9'):
@@ -125,6 +125,15 @@ class Goplt:
                 return
             else:
                 raise ValueError(memname+" error")
+    def WriteTMem(self,memname,s):
+        sstr="WN "+memname+" "+s
+        self.sendpack(sstr)
+        rstr=self.recvpack()
+        if rstr==b'[ack]':
+            return
+        else:
+            raise ValueError(memname+" error")
+
             
     def Enq(self):
         self.sendpack("ENQ")
@@ -135,6 +144,7 @@ class Goplt:
             return ""
         else:
             raise ValueError("ENQ error")
+#GOP-CT専用
     def RamUpload(self,startblock,fname):
         ret=True
         if os.path.exists(fname):
